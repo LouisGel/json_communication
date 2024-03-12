@@ -23,6 +23,7 @@ public:
     JsonCommuication(Serial*, void(json&));
     ~JsonCommuication();
 
+    void closeSerialComm();
     bool sendMessage(json&);
     void onMessageFunc(void(json&));
     void setSerial(Serial*);
@@ -53,11 +54,17 @@ JsonCommuication<LEN>::JsonCommuication(Serial* serial, void onMessageFunc(json&
 template <size_t LEN>
 JsonCommuication<LEN>::~JsonCommuication()
 {
-    delete _serial, _onMessageFunc;
     _serial->closeSerial();
     _onMessageFunc = nullptr;
     _serial = nullptr;
     _j_message.clear();
+}
+
+template <size_t LEN>
+void JsonCommuication<LEN>::closeSerialComm()
+{
+    _serial->closeSerial();
+    _serial = nullptr;
 }
 
 template <size_t LEN>
